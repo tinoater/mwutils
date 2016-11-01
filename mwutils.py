@@ -1,6 +1,3 @@
-import csv
-import os
-
 class Constants():
     def __init__(self, file_path):
         self.file_path = file_path
@@ -12,7 +9,9 @@ class Constants():
 
         .const file is a CSV list and is of the form
         <CONST_NAME> , <CONST_TYPE> , <VALUE>
-        eg. A_DICT,dictionary,{"Key1":"Value1","Key2":"Value2"}
+        eg. A_DICT,DICTIONARY,{"Key1":"Value1","Key2":"Value2"}
+
+        Can force an end of file witht the line END_OF_FILE
         :param filepath:
         :return:
         """
@@ -20,8 +19,6 @@ class Constants():
             con_file = open(self.file_path, "r")
         except:
             raise FileNotFoundError("Couldn't open constants text file")
-
-        #con_reader = csv.reader(con_file)
 
         i = 0
         loop = True
@@ -31,7 +28,10 @@ class Constants():
             if len(row) == 0:
                 loop = False
                 continue
-            if '#' in row[0]:
+            if '#' in row[0] or row == "\n":
+                continue
+            if row[:11] == 'END_OF_FILE':
+                loop = False
                 continue
 
             # Pull out the first and second arguments, the rest is the variable value
@@ -50,7 +50,8 @@ class Constants():
                     # We need to continue until we find the end of this string
                     while not (row.endswith('"\n') or row.endswith('"')):
                         row = con_file.readline()
-                        var_value += row
+                        if row[0] != '#':
+                            var_value += row
                     # Remove the trailing characters
                     if row.endswith('"\n'):
                         var_value = var_value[:-2]
@@ -65,13 +66,16 @@ class Constants():
 
             elif var_type == 'DICTIONARY':
                 # Handles the single line case
-                if var_value.startswith('"') and var_value.endswith('}\n'):
-                    var_value_temp = var_value[1:-2]
-                elif var_value.startswith('"') and var_value.endswith('\n'):
+                if var_value.endswith('}\n'):
+                    var_value_temp = var_value[:-2]
+                elif var_value.endswith('\n'):
                     var_value_temp = var_value[1:-1]
                     while not (row.endswith('}\n') or row.endswith('}')):
                         row = con_file.readline()
-                        var_value_temp += row.replace('\n', '')
+                        if row[0] != '#':
+                            # Strip out any left padding
+                            row = row.lstrip()
+                            var_value_temp += row.replace('\n', '')
                 else:
                     var_value_temp = var_value
 
@@ -79,12 +83,16 @@ class Constants():
 
                 var_value = dict()
                 for key_value_pair in key_value_pairs:
-                    key, value = key_value_pair.split(":")
+                    first_colon = key_value_pair.find(':')
+                    key = key_value_pair[:first_colon]
+                    value = key_value_pair[first_colon + 1:]
                     if key.startswith('"'):
                         key = key[1:]
                     if key.endswith('"'):
                         key = key[:-1]
 
+                    if value.startswith(" "):
+                        value = value[1:]
                     if value.startswith('"') and value.endswith('"'):
                         value = value[1:-1]
                     else:

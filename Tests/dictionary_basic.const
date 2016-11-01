@@ -1,6 +1,6 @@
-DICT_ONE_STRING,DICTIONARY,"{"key1":"value1"}
-DICT_ONE_NUMBER,DICTIONARY,"{"key1":10.5}
-DICT_TWO_STRING,DICTIONARY,"{"key1":"value1","key2":"value2"}
-DICT_MULTILINE_STRING,DICTIONARY,"{"key1":"thing1",
+DICT_ONE_STRING,DICTIONARY,{"key1":"value1"}
+DICT_ONE_NUMBER,DICTIONARY,{"key1":10.5}
+DICT_TWO_STRING,DICTIONARY,{"key1":"value1","key2":"value2"}
+DICT_MULTILINE_STRING,DICTIONARY,{"key1":"thing1",
 "key2":"thing2",
 "key3":"thing3"}

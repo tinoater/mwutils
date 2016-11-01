@@ -93,3 +93,35 @@ class ConstantsDictionaryTestCase(unittest.TestCase):
 
     def setUp(self):
         self.dictionary_test = mwutils.Constants("dictionary_basic.const")
+
+
+class ConstantsBettingTestCase(unittest.TestCase):
+    """Tests for Constants class - real betting variables"""
+
+    def test_first_strings(self):
+        """Can it load the first string variables?"""
+        self.assertEqual(self.real_test.WEBDRIVER_PATH, "F:\Coding\PycharmProjects\Arbitrage\chromedriver.exe")
+        self.assertEqual(self.real_test.ARBITRAGE_PATH, "F:\Coding\PycharmProjects\Arbitrage\ScrapedFiles")
+        self.assertEqual(self.real_test.RESULTS_PATH, "F:\Coding\PycharmProjects\Arbitrage\Results")
+        self.assertEqual(self.real_test.SUMMARY_RESULTS_PATH, "F:\Coding\PycharmProjects\Arbitrage\SummaryResults")
+
+    def test_commented_dictionary(self):
+        """Can it load a partially commented out dictionary?"""
+        self.assertEqual(len(self.real_test.BOOKMAKERS_LIST), 3)
+        self.assertEqual(self.real_test.BOOKMAKERS_LIST["EIGHT88"], 0)
+        self.assertEqual(self.real_test.BOOKMAKERS_LIST["PADDYPOWER"], 1)
+        self.assertEqual(self.real_test.BOOKMAKERS_LIST["WILLIAMHILL"], 3)
+
+    def test_large_dictionary(self):
+        """Can it load a big string dictionary?"""
+        self.assertEqual(len(self.real_test.EIGHT88_DICT), 8)
+        self.assertEqual(self.real_test.EIGHT88_DICT["Bookmaker"], "888")
+        self.assertEqual(self.real_test.EIGHT88_DICT["Football_LaLig"], "https://www.888sport.com/bet/#/filter/football/spain/laliga")
+        self.assertEqual(self.real_test.EIGHT88_DICT["Football_GeBun"], "https://www.888sport.com/bet/#/filter/football/germany/bundesliga")
+
+    def test_very_large_dictionary(self):
+        """Can it load a very long string dictionary?"""
+        self.assertEqual(len(self.real_test.FOOTBALL_DICT), 263)
+
+    def setUp(self):
+        self.real_test = mwutils.Constants("real_file.const")
