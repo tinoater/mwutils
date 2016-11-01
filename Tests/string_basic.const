@@ -1,0 +1,6 @@
+STRING,STRING,"Simple string"
+STRING_COMMA,STRING,"Simple, string"
+STRING_LONG,STRING,"Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10"
+STRING_REALLY_LONG,STRING,"Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10,Simple1, Simple2, Simple3, Simple4, Simple5, Simple6, Simple7, Simple8, Simple9, Simple10"
+STRING_NEWLINE,STRING,"Simple
+ string"
