@@ -81,9 +81,9 @@ class ConstantsDictionaryTestCase(unittest.TestCase):
 
     def test_multiline_string_dictionary(self):
         """Can it load a multiline string dictionary?"""
-        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key1"], "value1")
-        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key2"], "value2")
-        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key3"], "value3")
+        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key1"], "thing1")
+        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key2"], "thing2")
+        self.assertEqual(self.dictionary_test.DICT_MULTILINE_STRING["key3"], "thing3")
         self.assertEqual(len(self.dictionary_test.DICT_MULTILINE_STRING), 3)
 
     def test_number_dictionary(self):

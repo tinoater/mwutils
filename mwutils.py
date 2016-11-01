@@ -21,47 +21,77 @@ class Constants():
         except:
             raise FileNotFoundError("Couldn't open constants text file")
 
-        con_reader = csv.reader(con_file)
+        #con_reader = csv.reader(con_file)
 
-        for row in con_reader:
+        i = 0
+        loop = True
+        while loop:
+            row = con_file.readline()
             # First handle any comments and blank lines
             if len(row) == 0:
+                loop = False
                 continue
             if '#' in row[0]:
                 continue
 
-            var_name = row[0]
-            var_type = row[1]
+            # Pull out the first and second arguments, the rest is the variable value
+            first_comma = row.find(',')
+            second_comma = row.find(',', first_comma + 1)
+            var_name = row[0:first_comma]
+            var_type = row[first_comma + 1: second_comma]
+            var_value = row[second_comma + 1:]
 
             if var_type == 'STRING':
-                var_value = ''.join(row[2:])
+                # Handles the single line case
+                if var_value.startswith('"') and var_value.endswith('"\n'):
+                    var_value = var_value[1:-2]
+                elif var_value.startswith('"') and var_value.endswith('\n'):
+                    var_value = var_value[1:]
+                    # We need to continue until we find the end of this string
+                    while not (row.endswith('"\n') or row.endswith('"')):
+                        row = con_file.readline()
+                        var_value += row
+                    # Remove the trailing characters
+                    if row.endswith('"\n'):
+                        var_value = var_value[:-2]
+                    elif row.endswith('"'):
+                        var_value = var_value[:-1]
 
-                # Check that the string starts and ends with a double quote
-                if var_value.startswith('"') and var_value.endswith('"'):
-                    var_value = var_value[1:-1]
             elif var_type == 'NUMBER':
                 try:
-                    var_value = float(row[2])
+                    var_value = float(var_value)
                 except:
                     raise Exception(TypeError, "Number should be able to be cast as float")
-            elif var_type == 'DICTIONARY':
-                # Get a list of the key value pairs
-                key_value_pairs = ''.join(row[2:]).replace("{", "").replace("}", "").split(",")
 
+            elif var_type == 'DICTIONARY':
+                # Handles the single line case
+                if var_value.startswith('"') and var_value.endswith('}\n'):
+                    var_value_temp = var_value[1:-2]
+                elif var_value.startswith('"') and var_value.endswith('\n'):
+                    var_value_temp = var_value[1:-1]
+                    while not (row.endswith('}\n') or row.endswith('}')):
+                        row = con_file.readline()
+                        var_value_temp += row.replace('\n', '')
+                else:
+                    var_value_temp = var_value
+
+                key_value_pairs = var_value_temp.replace("{", "").replace("}", "").split(",")
+
+                var_value = dict()
                 for key_value_pair in key_value_pairs:
-                    var_value = dict()
                     key, value = key_value_pair.split(":")
                     if key.startswith('"'):
                         key = key[1:]
                     if key.endswith('"'):
                         key = key[:-1]
 
-                    if value.startswith('"'):
-                        value = value[1:]
-                    if value.endswith('"'):
-                        value = value[:-1]
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value[1:-1]
+                    else:
+                        value = float(value)
 
                     var_value[key] = value
+
             else:
                 raise Exception(ValueError, "Unknown variable type: " + var_type)
 
