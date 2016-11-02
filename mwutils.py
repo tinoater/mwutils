@@ -21,13 +21,16 @@ class Constants():
         eg. A_DICT,DICTIONARY,{"Key1":"Value1","Key2":"Value2"}
 
         Can force an end of file witht the line END_OF_FILE
-        :param filepath:
+        :param filepath: First looks in local directory, then takes the full path
         :return:
         """
         try:
             con_file = open(self.file_path, "r")
-        except:
-            raise FileNotFoundError("Couldn't open constants text file")
+        except FileNotFoundError:
+            try:
+                con_file = open(os.path.join(os.path.curdir, self.file_path))
+            except:
+                raise FileNotFoundError("Couldn't open constants text file")
 
         i = 0
         loop = True
