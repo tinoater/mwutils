@@ -1,4 +1,6 @@
 import unittest
+import os
+from bs4 import BeautifulSoup
 
 import mwutils
 
@@ -125,3 +127,58 @@ class ConstantsBettingTestCase(unittest.TestCase):
 
     def setUp(self):
         self.real_test = mwutils.Constants("real_file.const")
+
+
+class GetPageSourceURLTestCase(unittest.TestCase):
+    """Tests for the get_page_source_url function in mwutils.py."""
+
+    def setUp(self):
+        self.html_soup = mwutils.get_page_source_url("https://en.wikipedia.org/wiki/St_Columb_Major",
+                                                     "/home/bobby/Downloads/chromedriver",
+                                                     os.path.join(os.path.curdir, "output/st_columb_wiki.txt"),
+                                                     sleep_time=2)
+
+    def tearDown(self):
+        try:
+            os.remove(os.path.join(os.path.curdir, "output/st_columb_wiki.txt"))
+        except OSError:
+            pass
+
+    def test_page_downloads(self):
+        """Check that the page was downloaded to the out directory, is non empty and matches the html_soup"""
+        self.assertTrue(os.path.exists(os.path.join(os.path.curdir, "output/st_columb_wiki.txt")))
+
+        with open(os.path.join(os.path.curdir, "output/st_columb_wiki.txt")) as f:
+            self.text = f.read()
+            self.soup_from_text = BeautifulSoup(self.text, "lxml")
+
+        self.assertTrue(len(self.text) > 1)
+        self.assertEqual(self.soup_from_text, self.html_soup)
+
+    def test_page_downloads_correctly(self):
+        """Check that the file has the correct content"""
+        self.assertEqual(len(self.html_soup.findAll("h2")), 13)
+
+
+class GetPageSourceTestCase(unittest.TestCase):
+    """Tests for the get_page_source function in mwutils.py."""
+
+    def test_url_download(self):
+        try:
+            os.remove(os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"))
+        except OSError:
+            pass
+
+        self.html_soup = mwutils.get_page_source(url="https://en.wikipedia.org/wiki/St_Columb_Major",
+                                                 webdriver_path="/home/bobby/Downloads/chromedriver",
+                                                 file_path=os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"),
+                                                 sleep_time=2)
+
+        self.assertTrue(os.path.exists(os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt")))
+        self.assertEqual(len(self.html_soup.findAll("h2")), 13)
+
+    def tearDown(self):
+        try:
+            os.remove(os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"))
+        except OSError:
+            pass

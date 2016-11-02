@@ -1,3 +1,12 @@
+from bs4 import BeautifulSoup
+from contextlib import closing
+from selenium import webdriver
+import time
+import os
+
+# Default constants
+WEBDRIVER_PATH = "F:\Coding\PycharmProjects\Arbitrage\chromedriver.exe"
+
 class Constants():
     def __init__(self, file_path):
         self.file_path = file_path
@@ -106,3 +115,81 @@ class Constants():
             setattr(self, var_name, var_value)
 
         con_file.close()
+
+
+def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5):
+    """
+    Get page html (including javascript generated elements)
+    :param url: Full url (including http://)
+    :param out_file_path: Full path to output file (if wanted)
+    :param sleep_time: Time in seconds to wait for JS to load
+    :return: BeautifulSoup object
+    """
+    with closing(webdriver.Chrome(webdriver_path)) as browser:
+        browser.get(url)
+        # wait for the page to load
+        time.sleep(sleep_time)
+        page_source = browser.page_source.encode("ascii", errors="ignore").decode()
+
+    html_soup = BeautifulSoup(page_source, "lxml")
+
+    if out_file_path is not None:
+        if not os.path.exists(os.path.dirname(out_file_path)):
+            os.makedirs(os.path.dirname(out_file_path))
+        out_file = open(out_file_path, "w")
+        out_file.write(page_source)
+        out_file.close()
+
+    return html_soup
+
+
+def get_page_source_file(file_path):
+    """
+    Return html soup from a html text file
+    :param file_path:
+    :return: BeautifulSoup object
+    """
+    with open(file_path) as my_file:
+        html = my_file.read()
+        html_soup = BeautifulSoup(html, "lxml")
+
+    return html_soup
+
+
+def get_page_source(file_path=None, url=None, sleep_time=5, ignore_files=False, webdriver_path=WEBDRIVER_PATH):
+    """
+    Gets the BeautifulSoup from either a file (if its specified) or a website if it is not
+    :param file_path:
+    :param url:
+    :param sleep_time:
+    :param ignore_files:
+    :return:
+    """
+    if file_path is not None:
+        from_file = True
+    else:
+        from_file = False
+
+    if url is not None:
+        from_url = True
+    else:
+        from_url = False
+
+    if ignore_files:
+        from_file = False
+        from_url = True
+
+    if from_file:
+        # Check if the file_path exists
+        try:
+            html_soup = get_page_source_file(file_path)
+            return html_soup
+        except FileNotFoundError:
+            if not from_url:
+                raise FileNotFoundError("File not found, specify URL instead")
+
+    if from_url:
+        html_soup = get_page_source_url(url, webdriver_path, out_file_path=file_path, sleep_time=sleep_time)
+        return html_soup
+    else:
+        return None
