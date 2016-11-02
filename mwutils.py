@@ -28,7 +28,7 @@ class Constants():
             con_file = open(self.file_path, "r")
         except FileNotFoundError:
             try:
-                con_file = open(os.path.join(os.path.curdir, self.file_path))
+                con_file = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), self.file_path))
             except:
                 raise FileNotFoundError("Couldn't open constants text file")
 
