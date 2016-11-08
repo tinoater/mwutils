@@ -4,8 +4,7 @@ from selenium import webdriver
 import time
 import os
 
-# Default constants
-WEBDRIVER_PATH = "F:\Coding\PycharmProjects\Arbitrage\chromedriver.exe"
+from config import *
 
 class Constants():
     def __init__(self, file_path):
