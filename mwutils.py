@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from contextlib import closing
 from selenium import webdriver
 import time
-import os
 
 from config import *
 
