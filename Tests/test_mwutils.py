@@ -1,9 +1,14 @@
 import unittest
 import os
 from bs4 import BeautifulSoup
+from sys import platform
 
 import mwutils
 
+if platform == "linux" or platform == "linux2":
+    WEBDRIVER_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "Files\\chromedriver")
+elif platform == "win32":
+    WEBDRIVER_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "Files\\chromedriver_win.exe")
 
 # --------------------------
 # Constants class tests
@@ -129,12 +134,15 @@ class ConstantsBettingTestCase(unittest.TestCase):
         self.real_test = mwutils.Constants("real_file.const")
 
 
+# --------------------------
+# Page source URL function tests
+# --------------------------
 class GetPageSourceURLTestCase(unittest.TestCase):
     """Tests for the get_page_source_url function in mwutils.py."""
 
     def setUp(self):
         self.html_soup = mwutils.get_page_source_url("https://en.wikipedia.org/wiki/St_Columb_Major",
-                                                     "/home/bobby/Downloads/chromedriver",
+                                                     WEBDRIVER_PATH,
                                                      os.path.join(os.path.curdir, "output/st_columb_wiki.txt"),
                                                      sleep_time=2)
 
@@ -164,13 +172,8 @@ class GetPageSourceTestCase(unittest.TestCase):
     """Tests for the get_page_source function in mwutils.py."""
 
     def test_url_download(self):
-        try:
-            os.remove(os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"))
-        except OSError:
-            pass
-
         self.html_soup = mwutils.get_page_source(url="https://en.wikipedia.org/wiki/St_Columb_Major",
-                                                 webdriver_path="/home/bobby/Downloads/chromedriver",
+                                                 webdriver_path=WEBDRIVER_PATH,
                                                  file_path=os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"),
                                                  sleep_time=2)
 
