@@ -3,7 +3,8 @@ from contextlib import closing
 from selenium import webdriver
 import time
 
-from config import *
+import config
+
 
 class Constants():
     def __init__(self, file_path):
@@ -131,7 +132,7 @@ def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5, c
     """
     with closing(webdriver.Chrome(webdriver_path)) as browser:
         # Set the max element wait timeout
-        browser.implicitly_wait(SELENIUM_IMPLICIT_WAIT)
+        browser.implicitly_wait(config.SELENIUM_IMPLICIT_WAIT)
 
         browser.get(url)
         # wait for the page to load
@@ -169,7 +170,8 @@ def get_page_source_file(file_path):
     return html_soup
 
 
-def get_page_source(file_path=None, url=None, sleep_time=5, ignore_files=False, webdriver_path=WEBDRIVER_PATH):
+def get_page_source(file_path=None, url=None, sleep_time=5, ignore_files=False, webdriver_path=config.WEBDRIVER_PATH,
+                    class_to_poll=None):
     """
     Gets the BeautifulSoup from either a file (if its specified) or a website if it is not
     :param file_path:
@@ -202,7 +204,8 @@ def get_page_source(file_path=None, url=None, sleep_time=5, ignore_files=False, 
                 raise FileNotFoundError("File not found, specify URL instead")
 
     if from_url:
-        html_soup = get_page_source_url(url, webdriver_path, out_file_path=file_path, sleep_time=sleep_time)
+        html_soup = get_page_source_url(url, webdriver_path, out_file_path=file_path, sleep_time=sleep_time,
+                                        class_to_poll=class_to_poll)
         return html_soup
     else:
         return None
