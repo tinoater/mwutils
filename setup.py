@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='mwutils',
-    version='1.0.2',
+    version='1.0.3',
     packages=[''],
     url='https://github.com/tinoater/mwutils.git',
     license='',
