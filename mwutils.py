@@ -118,18 +118,30 @@ class Constants():
         con_file.close()
 
 
-def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5):
+def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5, class_to_poll=None):
     """
     Get page html (including javascript generated elements)
+    If a css_selector is passed in then this selector is polled up to SELENIUM_IMPLICIT_WAIT seconds
+    After this a one second sleep time is applied
+    If a css_selector is not pased in then sleep_time is applied
     :param url: Full url (including http://)
     :param out_file_path: Full path to output file (if wanted)
     :param sleep_time: Time in seconds to wait for JS to load
     :return: BeautifulSoup object
     """
     with closing(webdriver.Chrome(webdriver_path)) as browser:
+        # Set the max element wait timeout
+        browser.implicitly_wait(SELENIUM_IMPLICIT_WAIT)
+
         browser.get(url)
         # wait for the page to load
-        time.sleep(sleep_time)
+        if class_to_poll is not None:
+            test = browser.find_elements_by_class_name(class_to_poll)
+            time.sleep(1)
+        else:
+            time.sleep(sleep_time)
+
+        # Page wait has finished, now save page source
         page_source = browser.page_source.encode("ascii", errors="ignore").decode()
 
     html_soup = BeautifulSoup(page_source, "lxml")
