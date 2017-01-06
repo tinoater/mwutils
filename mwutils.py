@@ -139,7 +139,7 @@ def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5, c
         # wait for the page to load
         if class_to_poll is not None:
             test = browser.find_elements_by_class_name(class_to_poll)
-            time.sleep(1)
+            time.sleep(2)
         else:
             time.sleep(sleep_time)
 

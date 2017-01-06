@@ -3,7 +3,7 @@ import os
 from sys import platform
 
 
-SELENIUM_IMPLICIT_WAIT = 10
+SELENIUM_IMPLICIT_WAIT = 30
 
 
 if platform == "linux" or platform == "linux2":
