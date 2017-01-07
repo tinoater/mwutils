@@ -145,8 +145,11 @@ def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5, c
 
         # Page wait has finished, now save page source
         page_source = browser.page_source.encode("ascii", errors="ignore").decode()
+        current_url = browser.current_url
 
     html_soup = BeautifulSoup(page_source, "lxml")
+    html_soup.requested_url = url
+    html_soup.final_url = current_url
 
     if out_file_path is not None:
         if not os.path.exists(os.path.dirname(out_file_path)):
