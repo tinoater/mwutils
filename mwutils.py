@@ -147,6 +147,9 @@ def get_page_source_url(url, webdriver_path, out_file_path=None, sleep_time=5, c
         page_source = browser.page_source.encode("ascii", errors="ignore").decode()
         current_url = browser.current_url
 
+        # It looks like closing does not kill the process so quit it here
+        browser.quit()
+
     html_soup = BeautifulSoup(page_source, "lxml")
     html_soup.requested_url = url
     html_soup.final_url = current_url
