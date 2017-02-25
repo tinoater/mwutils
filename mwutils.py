@@ -3,6 +3,7 @@ from contextlib import closing
 from selenium import webdriver
 import time
 import os
+import psutil
 
 import config
 
@@ -213,3 +214,49 @@ def get_page_source(file_path=None, url=None, sleep_time=5, ignore_files=False, 
         return html_soup
     else:
         return None
+
+
+def get_active_processes_by_name(process_name):
+    """
+    Return processes that match the given process_name
+    :param process_name: Exact name of processes to be found
+    :return: List of process objects
+    """
+    found_processes = []
+    for proc in psutil.process_iter():
+        try:
+            pinfo = proc.as_dict(attrs=["pid", "name"])
+        except psutil.NoSuchProcess:
+            pass
+        else:
+            if pinfo["name"] == process_name:
+                # Add to the list
+                found_processes.append(proc)
+
+    return found_processes
+
+
+def kill_processes(process_list):
+    """
+    Kill each process in a list
+
+    :param process_list: psutil.Process object list
+    :return:
+    """
+    for p in process_list:
+        p.kill()
+
+
+def kill_processes_by_name(process_name):
+    """
+    Kill processes that match the process name
+    :param process_name: Exact name of processes to be found
+    :return: Number of killed processes
+    """
+    process_list = get_active_processes_by_name(process_name)
+    number_of_processes = len(process_list)
+
+    if number_of_processes > 0:
+        kill_processes(process_list)
+
+    return number_of_processes
