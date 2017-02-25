@@ -15,4 +15,4 @@ EMAIL_CREDENTIALS = dict()
 EMAIL_CREDENTIALS['arbitrage'] = {'host_name': 'localhost',
                                   'from': 'arbitrage@ahabEmails'}
 EMAIL_CREDENTIALS['testing'] = {'host_name': 'localhost',
-                             'from': 'testing@ahabEmails'}
+                                'from': 'testing@ahabEmails'}

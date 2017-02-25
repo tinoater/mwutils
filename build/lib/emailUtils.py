@@ -26,12 +26,3 @@ class AhabEmailSender:
         self.s = smtplib.SMTP(self.host_name)
         self.s.send_message(self.msg)
         self.s.quit()
-
-if __name__ == "__main__":
-    email = dict()
-    email['body'] = "test"
-    email['to'] = "martinleewatts@gmail.com"
-    email['subject'] = "subjectey"
-
-    email_sender = AhabEmailSender("arbitrage", email)
-    email_sender.send()
