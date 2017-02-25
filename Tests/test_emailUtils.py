@@ -1,6 +1,6 @@
 import unittest
 
-import emailUtils
+from .context import email_utils
 
 
 class EmailSendingTestCase(unittest.TestCase):
@@ -11,17 +11,17 @@ class EmailSendingTestCase(unittest.TestCase):
         to = "martinleewatts@gmail.com"
         subject = "Unit Test for email sending"
 
-        email = emailUtils.AhabEmailSender("testing", to, body, subject)
+        email = email_utils.AhabEmailSender("testing", to, body, subject)
         email.send()
 
     def test_basic_email_no_subject(self):
         body = "unit test"
         to = "martinleewatts@gmail.com"
 
-        email = emailUtils.AhabEmailSender("testing", to, body)
+        email = email_utils.AhabEmailSender("testing", to, body)
         email.send()
 
     def test_email_incorrect_email_type(self):
         to = "dummy"
         body = "dummy"
-        self.assertRaises(KeyError, lambda: emailUtils.AhabEmailSender("NotARealThing", to, body))
+        self.assertRaises(KeyError, lambda: email_utils.AhabEmailSender("NotARealThing", to, body))

@@ -5,7 +5,7 @@ import time
 import os
 import psutil
 
-import config
+import mwutils.config as config
 
 
 class Constants():

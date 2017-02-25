@@ -3,7 +3,8 @@ import os
 from bs4 import BeautifulSoup
 from sys import platform
 
-import mwutils
+from .context import utils
+from .context import email_utils
 
 if platform == "linux" or platform == "linux2":
     WEBDRIVER_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "Files\\chromedriver")
@@ -18,7 +19,7 @@ class ConstantsExceptionsTestCase(unittest.TestCase):
 
     def test_no_file(self):
         """Does it fail correctly when file not found?"""
-        self.assertRaises(FileNotFoundError, lambda: mwutils.Constants('FileNotThere.const'))
+        self.assertRaises(FileNotFoundError, lambda: utils.Constants('FileNotThere.const'))
 
 
 class ConstantsStringTestCase(unittest.TestCase):
@@ -46,7 +47,7 @@ class ConstantsStringTestCase(unittest.TestCase):
         self.assertEqual(self.string_test.STRING_NEWLINE, "Simple\n string")
 
     def setUp(self):
-        self.string_test = mwutils.Constants("string_basic.const")
+        self.string_test = utils.Constants("string_basic.const")
 
 
 class ConstantsNumberTestCase(unittest.TestCase):
@@ -69,7 +70,7 @@ class ConstantsNumberTestCase(unittest.TestCase):
         self.assertEqual(self.number_test.NUMBER_NEGATIVE, -0.05)
 
     def setUp(self):
-        self.number_test = mwutils.Constants("number_basic.const")
+        self.number_test = utils.Constants("number_basic.const")
 
 
 class ConstantsDictionaryTestCase(unittest.TestCase):
@@ -99,7 +100,7 @@ class ConstantsDictionaryTestCase(unittest.TestCase):
         self.assertEqual(len(self.dictionary_test.DICT_ONE_NUMBER), 1)
 
     def setUp(self):
-        self.dictionary_test = mwutils.Constants("dictionary_basic.const")
+        self.dictionary_test = utils.Constants("dictionary_basic.const")
 
 
 class ConstantsBettingTestCase(unittest.TestCase):
@@ -131,17 +132,17 @@ class ConstantsBettingTestCase(unittest.TestCase):
         self.assertEqual(len(self.real_test.FOOTBALL_DICT), 263)
 
     def setUp(self):
-        self.real_test = mwutils.Constants("real_file.const")
+        self.real_test = utils.Constants("real_file.const")
 
 
 # --------------------------
 # Page source URL function tests
 # --------------------------
 class GetPageSourceURLTestCase(unittest.TestCase):
-    """Tests for the get_page_source_url function in mwutils.py."""
+    """Tests for the get_page_source_url function in utils.py."""
 
     def setUp(self):
-        self.html_soup = mwutils.get_page_source_url("https://en.wikipedia.org/wiki/St_Columb_Major",
+        self.html_soup = utils.get_page_source_url("https://en.wikipedia.org/wiki/St_Columb_Major",
                                                      WEBDRIVER_PATH,
                                                      os.path.join(os.path.curdir, "output/st_columb_wiki.txt"),
                                                      sleep_time=2)
@@ -169,10 +170,10 @@ class GetPageSourceURLTestCase(unittest.TestCase):
 
 
 class GetPageSourceTestCase(unittest.TestCase):
-    """Tests for the get_page_source function in mwutils.py."""
+    """Tests for the get_page_source function in utils.py."""
 
     def test_url_download(self):
-        self.html_soup = mwutils.get_page_source(url="https://en.wikipedia.org/wiki/St_Columb_Major",
+        self.html_soup = utils.get_page_source(url="https://en.wikipedia.org/wiki/St_Columb_Major",
                                                  webdriver_path=WEBDRIVER_PATH,
                                                  file_path=os.path.join(os.path.curdir, "output/st_columb_wiki_perm.txt"),
                                                  sleep_time=2)

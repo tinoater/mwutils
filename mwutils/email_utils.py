@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
-import config
+import mwutils.config as config
 
 
 class AhabEmailSender:
