@@ -1,9 +1,8 @@
-from distutils.core import setup
-from setuptools import find_packages
+from setuptools import setup, find_packages
 
 setup(
     name='mwutils',
-    version='1.0.11',
+    version='1.0.12',
     url='https://github.com/tinoater/mwutils.git',
     license='',
     author='bobby',
