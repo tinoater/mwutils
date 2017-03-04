@@ -5,7 +5,7 @@ import mwutils.config as config
 
 
 class AhabEmailSender:
-    def __init__(self, email_type, to, body, subject=None):
+    def __init__(self, email_type, to, body, subject=None, sub_type='plain'):
         if subject is None:
             self.subject = email_type
         else:
@@ -19,7 +19,7 @@ class AhabEmailSender:
         self.host_name = self.email_credentials['host_name']
         self.from_address = self.email_credentials['from']
 
-        self.msg = MIMEText(body)
+        self.msg = MIMEText(body, sub_type)
         self.msg['Subject'] = self.subject
         self.msg['From'] = self.from_address
         self.msg['To'] = to
